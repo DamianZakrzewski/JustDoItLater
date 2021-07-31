@@ -1,0 +1,67 @@
+﻿<Window x:Class="JustDoItLater.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="clr-namespace:JustDoItLater.Converters"
+        xmlns:usercontrols="clr-namespace:JustDoItLater.UserControls"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}"
+        mc:Ignorable="d"
+        DataContext="{StaticResource MainViewModel}"
+        Title="JustDoItLater!" Height="480" Width="700" MinHeight="480" MinWidth="700">
+    <Window.Resources>
+        <ResourceDictionary>
+            <conv:ObjectToVisibilityConverter x:Key="objectToVisibilityConverter" />
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="40" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        
+        <StackPanel  Grid.Column="0" Grid.Row="0">
+            <Expander x:Name="DateExpander" Header="{Binding ElementName=Calendar, Path=SelectedDate}" ExpandDirection="Down"
+                      Cursor="Hand" Style="{StaticResource MaterialDesignExpander}">
+                <Calendar x:Name="Calendar" SelectedDate="{Binding Path=CurrentDate}"
+                          Style="{StaticResource MaterialDesignCalendarPortrait}" HorizontalAlignment="Stretch" />
+            </Expander>
+        </StackPanel>
+        
+        <ListView x:Name="TDList" Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=ToDos, Mode=OneWay}" SelectedItem="{Binding Path=Selected, Mode=TwoWay}" BorderBrush="{x:Null}" />
+
+        <usercontrols:ViewControl x:Name="View" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="3"
+                                      DataContext="{Binding Path=Selected, Mode=TwoWay}"
+                                      Visibility="{Binding Path=Selected, Converter={StaticResource objectToVisibilityConverter}}" />
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Width="{Binding ElementName=DateExpander, Path=Width}" Height="40" Margin="2.5">
+
+            <Button x:Name="Add" Command="{Binding Path=AddCommand}" Width="28" Height="28"
+                    Style="{StaticResource MaterialDesignFloatingActionDarkButton}">
+                <md:PackIcon Kind="Add" Width="25" Height="25" />
+            </Button>
+            <Button x:Name="Delete" Command="{Binding Path=DeleteCommand}" Width="28" Height="28"
+                    Style="{StaticResource MaterialDesignFloatingActionDarkButton}">
+                <md:PackIcon Kind="Delete" Width="25" Height="25" />
+            </Button>
+            <Button x:Name="Save" Command="{Binding Path=SaveCommand}" Width="28" Height="28"
+                    Style="{StaticResource MaterialDesignFloatingActionDarkButton}">
+                <md:PackIcon Kind="Floppy" Width="25" Height="25" />
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
