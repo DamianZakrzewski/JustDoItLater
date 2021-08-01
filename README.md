@@ -5,4 +5,4 @@
  Each entry have a status - default state is NotStated. 
  There are tree states NotStarted, InProgress and Completed.
 
- Data are saved to SQLite database.
+ Data are saved to SQLite database. Db is generated automatically at first application start.
